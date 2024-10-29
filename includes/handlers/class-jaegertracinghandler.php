@@ -30,10 +30,11 @@ class JaegerTracingHandler extends AbstractTracingHandler {
 	 * @param   int     $sampling   The sampling rate (0->1000).
 	 * @param   string  $url        The base endpoint.
 	 * @param   string  $tags       Optional. The tags to add for each span.
+	 * @param   string  $service    Optional. The service name.
 	 * @since    3.0.0
 	 */
-	public function __construct( string $uuid, int $format, int $sampling, string $url, string $tags = '' ) {
-		parent::__construct( $uuid, $format, $sampling, $tags );
+	public function __construct( string $uuid, int $format, int $sampling, string $url, string $tags = '', string $service = 'WordPress' ) {
+		parent::__construct( $uuid, $format, $sampling, $tags, $service );
 		$this->endpoint                             = $url . '/api/traces';
 		$this->post_args['headers']['Content-Type'] = 'application/x-thrift';
 	}
