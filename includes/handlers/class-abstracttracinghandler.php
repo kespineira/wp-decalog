@@ -348,6 +348,13 @@ abstract class AbstractTracingHandler extends AbstractProcessingHandler {
 					);
 				}
 			}
+				$s['tags'][] = new JTag(
+					[
+						'key'   => 'http.status_code',
+						'vType' => JTagType::STRING,
+						'vStr'  => (string) http_response_code(),
+					]
+				);
 			$spans[] = new JSpan( $s );
 		}
 		$batch    = new JBatch(

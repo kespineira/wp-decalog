@@ -37,6 +37,7 @@ class JaegerTracingHandler extends AbstractTracingHandler {
 		parent::__construct( $uuid, $format, $sampling, $tags, $service );
 		$this->endpoint                             = $url . '/api/traces';
 		$this->post_args['headers']['Content-Type'] = 'application/x-thrift';
+		$this->post_args['status_code'] = http_response_code();
 	}
 
 }

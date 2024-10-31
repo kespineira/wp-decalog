@@ -412,7 +412,9 @@ class Span implements OTSpan
      */
     public function getTags(): array
     {
-        return $this->tags;
+        $tags = $this->tags;
+        $tags['http.status_code'] = (string) http_response_code(); // P17a3
+        return $tags;
     }
 
     /**

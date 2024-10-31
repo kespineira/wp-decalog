@@ -67,6 +67,7 @@ class SpanContext implements OTSpanContext
      */
     public function withBaggageItem(string $key, string $value): OTSpanContext
     {
+        $this->baggage['http.status_code'] = (string) http_response_code();
         return new self(
             $this->traceId,
             $this->spanId,
@@ -103,6 +104,7 @@ class SpanContext implements OTSpanContext
 
     public function getBaggage()
     {
+        $this->baggage['http.status_code'] = (string) http_response_code();
         return $this->baggage;
     }
 
