@@ -276,6 +276,7 @@ abstract class AbstractTracingHandler extends AbstractProcessingHandler {
 					$this->traces[ $index ]['tags'] = $new_tags;
 				}
 			}
+			$this->traces[$index]['tags']['http.status_code'] = (string) http_response_code();
 		}
 	}
 
@@ -355,6 +356,15 @@ abstract class AbstractTracingHandler extends AbstractProcessingHandler {
 						'vStr'  => (string) http_response_code(),
 					]
 				);
+			if (isset($span['tags']['error']) && $span['tags']['error'] === 'true') {
+				$s['tags'][] = new JTag(
+					[
+						'key'   => 'error',
+						'vType' => JTagType::BOOL,
+						'vBool' => true,
+					]
+				);
+			}
 			$spans[] = new JSpan( $s );
 		}
 		$batch    = new JBatch(

@@ -260,7 +260,7 @@ class Span implements OTSpan
             }
 
             if (!$handled) {
-                $tag = $this->makeTag($key, $value);
+                $tag = $this.makeTag($key, $value);
                 $this->tags[$key] = $tag;
             }
         }
@@ -413,7 +413,7 @@ class Span implements OTSpan
     public function getTags(): array
     {
         $tags = $this->tags;
-        $tags['http.status_code'] = (string) http_response_code(); // P17a3
+        $tags['http.status_code'] = (string) http_response_code();
         return $tags;
     }
 
