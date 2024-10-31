@@ -276,7 +276,6 @@ abstract class AbstractTracingHandler extends AbstractProcessingHandler {
 					$this->traces[ $index ]['tags'] = $new_tags;
 				}
 			}
-			$this->traces[$index]['tags']['http.status_code'] = (string) http_response_code();
 		}
 	}
 
@@ -312,6 +311,13 @@ abstract class AbstractTracingHandler extends AbstractProcessingHandler {
 				]
 			);
 		}
+		$process->tags[] = new JTag(
+			[
+				'key'   => 'http.status_code',
+				'vType' => JTagType::STRING,
+				'vStr'  => (string) http_response_code(),
+			]
+		);
 		foreach ( $this->traces as $span ) {
 			$s = [
 				'traceIdLow'  => (int) base_convert( substr( $span['traceId'], 16, 16 ), 16, 10 ),
@@ -340,28 +346,23 @@ abstract class AbstractTracingHandler extends AbstractProcessingHandler {
 			}
 			if ( isset( $span['tags'] ) && is_array( $span['tags'] ) && 0 < count( $span['tags'] ) ) {
 				foreach ( $span['tags'] as $key => $tag ) {
-					$s['tags'][] = new JTag(
-						[
-							'key'   => $key,
-							'vType' => JTagType::STRING,
-							'vStr'  => (string) $tag,
-						]
-					);
+					if ($key !== 'http.status_code') {
+						$s['tags'][] = new JTag(
+							[
+								'key'   => $key,
+								'vType' => JTagType::STRING,
+								'vStr'  => (string) $tag,
+							]
+						);
+					}
 				}
 			}
-				$s['tags'][] = new JTag(
-					[
-						'key'   => 'http.status_code',
-						'vType' => JTagType::STRING,
-						'vStr'  => (string) http_response_code(),
-					]
-				);
 			if (isset($span['tags']['error']) && $span['tags']['error'] === 'true') {
 				$s['tags'][] = new JTag(
 					[
-						'key'   => 'error',
-						'vType' => JTagType::BOOL,
-						'vBool' => true,
+							'key'   => 'error',
+							'vType' => JTagType::BOOL,
+							'vBool' => true,
 					]
 				);
 			}
