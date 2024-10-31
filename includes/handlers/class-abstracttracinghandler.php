@@ -311,13 +311,6 @@ abstract class AbstractTracingHandler extends AbstractProcessingHandler {
 				]
 			);
 		}
-		$process->tags[] = new JTag(
-			[
-				'key'   => 'http.status_code',
-				'vType' => JTagType::STRING,
-				'vStr'  => (string) http_response_code(),
-			]
-		);
 		foreach ( $this->traces as $span ) {
 			$s = [
 				'traceIdLow'  => (int) base_convert( substr( $span['traceId'], 16, 16 ), 16, 10 ),
@@ -334,6 +327,13 @@ abstract class AbstractTracingHandler extends AbstractProcessingHandler {
 			} else {
 				$s['parentSpanId']  = 0;
 				$s['operationName'] = $span['localEndpoint']['serviceName'] . ' [' . str_replace( 'CALL:', '', $span['name'] . ']' );
+				$s['tags'][] = new JTag(
+					[
+						'key'   => 'http.status_code',
+						'vType' => JTagType::STRING,
+						'vStr'  => (string) http_response_code(),
+					]
+				);
 			}
 			if ( isset( $span['kind'] ) && is_string( $span['kind'] ) ) {
 				$s['tags'][] = new JTag(
