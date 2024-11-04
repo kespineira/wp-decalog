@@ -357,15 +357,6 @@ abstract class AbstractTracingHandler extends AbstractProcessingHandler {
 					}
 				}
 			}
-			if (isset($span['tags']['error']) && $span['tags']['error'] === 'true') {
-				$s['tags'][] = new JTag(
-					[
-							'key'   => 'error',
-							'vType' => JTagType::BOOL,
-							'vBool' => true,
-					]
-				);
-			}
 			$spans[] = new JSpan( $s );
 		}
 		$batch    = new JBatch(
